@@ -1,0 +1,9 @@
+CREATE TABLE etf_info (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    symbol VARCHAR(10) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL,
+    issuer VARCHAR(100) NOT NULL,
+    dividend_frequency VARCHAR(20),
+    listing_date DATE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
