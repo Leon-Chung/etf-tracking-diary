@@ -100,8 +100,8 @@ backend/
     │   ├── etf_info.py      已完成
     │   ├── etf_snapshot.py  已完成
     │   ├── etf_holding.py   已完成
-    │   ├── etf_dividend.py  尚未完成
-    │   └── etf_price_history.py 尚未完成
+    │   ├── etf_dividend.py  已完成
+    │   └── etf_price_history.py 已完成
     │
     └── test_db.py
 
@@ -109,15 +109,14 @@ backend/
 目前 Git：
 已完成 commit：
 
-"新增 etf_price_history table"
+"etf_dividend.py"
+"etf_price_history.py"
 
 並 push 到 GitHub。
 
 
 下一步請從：
-1. 完成 SQLAlchemy ORM Model：
-   - etf_dividend.py
-   - etf_price_history.py
+1. 建立 models/__init__.py 統一註冊所有 Model。
 
 開始。
 

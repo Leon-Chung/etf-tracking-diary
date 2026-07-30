@@ -5,7 +5,7 @@ CREATE TABLE etf_snapshot (
 
     fund_size NUMERIC(18,2),
     beneficiaries INTEGER,
-    management_fee NUMERIC(5,2),
+    management_fee NUMERIC(5,2), --建議之後調整 NUMERIC(5,3)
 	nav NUMERIC(10,2),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

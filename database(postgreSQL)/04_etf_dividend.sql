@@ -5,7 +5,7 @@ CREATE TABLE etf_dividend (
 
     ex_dividend_date DATE NOT NULL,
     payment_date DATE,
-    cash_dividend NUMERIC(10,2) NOT NULL,
+    cash_dividend NUMERIC(10,2) NOT NULL, --建議之後調整 NUMERIC(10,4)
 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
