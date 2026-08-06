@@ -155,7 +155,16 @@ Alembic Migration 建立版本控制
    - Service
    - API
    - Test
-6. 專案規劃:
+6. git commit 採用「英文類型 + 中文說明」的方式:
+   - refactor：重構（沒有新增功能，只是整理程式結構）
+   - feat: 新增 ETF 基本資料 API
+   - fix: 修正 PostgreSQL 連線問題
+   - refactor: 整理 SQLAlchemy Model 與測試架構
+   - docs: 更新專案開發紀錄
+   - test: 新增 SQLAlchemy Metadata 測試
+   - style: 調整程式碼格式
+
+7. 專案規劃:
 
 Phase 1：Backend Foundation
     ├── Project Structure      ✅
