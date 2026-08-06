@@ -58,7 +58,7 @@ database(postgreSQL) 已完成：
 04_etf_price_history.sql
 
 
-PostgreSQL 已建立 5 張表：
+PostgreSQL 預計建立 5 張表：
 
 1. etf_info
 用途：
@@ -92,32 +92,127 @@ ETF 配息紀錄
 目前 backend：
 
 backend/
-└── app/
-    ├── main.py              FastAPI入口
-    ├── database.py          PostgreSQL連線
-    ├── models/              SQLAlchemy ORM Model
-    │   ├── __init__.py
-    │   ├── etf_info.py      已完成
-    │   ├── etf_snapshot.py  已完成
-    │   ├── etf_holding.py   已完成
-    │   ├── etf_dividend.py  已完成
-    │   └── etf_price_history.py 已完成
+│
+├── app/
+│   ├── main.py            FastAPI入口             
+│   ├── database.py        PostgreSQL連線
+│   │
+│   └── models/            SQLAlchemy ORM Model
+│       ├── __init__.py    SQLAlchemy Model 統一出口 (集中匯入以下檔案以方便其他模組引用)
+│       ├── etf_info.py           已完成(匯出到__init__.py內)
+│       ├── etf_snapshot.py       已完成(匯出到__init__.py內)
+│       ├── etf_holdings.py       已完成(匯出到__init__.py內)
+│       ├── etf_dividend.py       已完成(匯出到__init__.py內)
+│       └── etf_price_history.py  已完成(匯出到__init__.py內)
+│
+└── tests/
     │
-    └── test_db.py
+    ├─ __init__.py
+    │
+    ├─ database/
+    │   ├── __init__.py
+    │   └── test_database.py 測試 PostgreSQL 能不能連線
+    │
+    └─ models/
+        ├── __init__.py
+        └── test_models.py   測試 Python 是否成功載入所有 SQLAlchemy Model( 確認__init__.py檔案內，所有 Model Class 是否成功註冊 )
 
 
 目前 Git：
 已完成 commit：
 
-"etf_dividend.py"
-"etf_price_history.py"
+ 1. 建立 models/__init__.py 作為 Model 統一出口
+ 2. 建立 tests 測試目錄架構
+ 3. 因移動檔案關係, 重新測試先前的 PostgreSQL 連線測試
+ 4. 新增 SQLAlchemy Model 匯入測試 (models/__init__.py)
 
 並 push 到 GitHub。
 
 
 下一步請從：
-1. 建立 models/__init__.py 統一註冊所有 Model。
+
+SQLAlchemy Metadata 驗證
+        ↓
+database layer 重構
+        ↓
+Alembic Migration 建立版本控制
+        ↓
+同步 SQLAlchemy Model 與 PostgreSQL Schema
 
 開始。
 
-不要重新設計資料庫架構，沿用目前設計。
+------------------------------------------------------------------------------
+
+開發原則：
+
+1. 不重新設計目前 PostgreSQL Schema 架構
+2. 沿用現有 ETF 資料模型
+3. 使用 SQLAlchemy ORM 管理資料表
+4. 使用 Alembic 管理 Database Migration
+5. 採用大型專案分層架構：
+   - Model
+   - Repository
+   - Service
+   - API
+   - Test
+6. 專案規劃:
+
+Phase 1：Backend Foundation
+    ├── Project Structure      ✅
+    ├── PostgreSQL Connection  ✅
+    ├── SQLAlchemy Models      ✅
+    ├── Model Registry         ✅
+    ├── Tests Structure        ✅
+    ├── Basic Connection Tests ✅
+    └── Git Version Control    ✅
+
+↓
+
+Phase 2：Database Layer
+    ├── SQLAlchemy Metadata
+    ├── Database Layer Refactor
+    ├── Alembic
+    └── Migration
+
+↓
+
+Phase 3：Repository Layer
+    ├── CRUD
+    ├── Query
+    └── Transaction
+
+↓
+
+Phase 4：Service Layer
+    ├── ETF Business Logic
+    ├── Ranking
+    ├── Dividend
+    └── Portfolio
+
+↓
+
+Phase 5：API Layer
+    ├── REST API
+    ├── Swagger
+    └── Validation
+
+↓
+
+Phase 6：Authentication
+    ├── JWT
+    ├── Login
+    └── Permission
+
+↓
+
+Phase 7：Testing
+    ├── Unit Test
+    ├── Integration Test
+    └── API Test
+
+↓
+
+Phase 8：Deployment
+    ├── Docker
+    ├── Docker Compose
+    └── Production Configuration
