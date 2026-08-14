@@ -26,9 +26,26 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
+# 從 dotenv 這個套件裡，把 load_dotenv 這個函式拿進來，讓我的 Python 程式可以使用它。
+from dotenv import load_dotenv
 
-DATABASE_URL = "postgresql://postgres:konts12345@localhost:5432/etf_database"
+# os 是 Python 內建的標準函式庫。我們這裡需要它，是因為它可以讓 Python 讀取「環境變數」。
+import os
 
+# 去找 .env，把裡面的環境變數讀進來
+load_dotenv()
+
+# 按照大型／正式專案的做法，我們不應該把密碼直接寫在 Python 程式碼裡。
+# DATABASE_URL = "postgresql://postgres:konts12345@localhost:5432/etf_database"
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# 如果我沒有找到 DATABASE_URL ; 不要繼續跑，直接報錯告訴開發者
+if DATABASE_URL is None:
+    raise RuntimeError("DATABASE_URL is not set")
+
+# 把「DATABASE_URL 有沒有成功載入」這件事情印出來到終端機顯示。
+# print("DATABASE_URL loaded:", DATABASE_URL is not None)
 
 engine = create_engine(DATABASE_URL)
 

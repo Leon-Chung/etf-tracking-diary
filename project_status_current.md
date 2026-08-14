@@ -178,8 +178,9 @@ Phase 1：Backend Foundation
 ↓
 
 Phase 2：Database Layer
-    ├── SQLAlchemy Metadata
-    ├── Database Layer Refactor
+    ├── SQLAlchemy Metadata    ✅
+    ├── Database Layer Refactor✅
+    │   └── .env / 環境變數     
     ├── Alembic
     └── Migration
 
