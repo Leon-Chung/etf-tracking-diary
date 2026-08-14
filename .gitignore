@@ -1,15 +1,18 @@
-# Python 虛擬環境
+
+# gitignore的檔案內容是用來=>告訴 Git「不要追蹤哪些檔案」
+
+# Python 虛擬環境 → Git 忽略 ❌
 .venv/
 
-# Python 快取
+# Python 快取 → Git 忽略 ❌
 __pycache__/
 *.pyc
 
-# 環境變數
+# 環境變數 → Git 忽略 ❌
 .env
 
-# VS Code 設定
+# VS Code 設定 → Git 忽略 ❌
 .vscode/
 
-# 測試快取
-.pytest_cache/
+# 測試快取 → Git 忽略 ❌
+.pytest_cache/ 
