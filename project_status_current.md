@@ -105,17 +105,20 @@ backend/
 │       ├── etf_dividend.py       已完成(匯出到__init__.py內)
 │       └── etf_price_history.py  已完成(匯出到__init__.py內)
 │
-└── tests/
-    │
-    ├─ __init__.py
-    │
-    ├─ database/
-    │   ├── __init__.py
-    │   └── test_database.py 測試 PostgreSQL 能不能連線
-    │
-    └─ models/
-        ├── __init__.py
-        └── test_models.py   測試 Python 是否成功載入所有 SQLAlchemy Model( 確認__init__.py檔案內，所有 Model Class 是否成功註冊 )
+├── tests/
+│   │
+│   ├─ __init__.py
+│   │
+│   ├─ database/
+│   │   ├── __init__.py
+│   │   ├── test_session.py  測試能不能建立 SQLAlchemy Session
+│   │   └── test_database.py 測試 PostgreSQL 能不能連線
+│   │
+│   └─ models/
+│       ├── __init__.py
+│       ├── test_metadata.py 測試「Model 有沒有註冊到 Base.metadata」  
+│       └── test_models.py   測試 Python 是否成功載入所有 SQLAlchemy Model( 確認__init__.py檔案內，所有 Model Class 是否成功註冊 )
+└── .env
 
 
 目前 Git：
@@ -167,20 +170,31 @@ Alembic Migration 建立版本控制
 7. 專案規劃:
 
 Phase 1：Backend Foundation
-    ├── Project Structure      ✅
-    ├── PostgreSQL Connection  ✅
-    ├── SQLAlchemy Models      ✅
-    ├── Model Registry         ✅
-    ├── Tests Structure        ✅
-    ├── Basic Connection Tests ✅
-    └── Git Version Control    ✅
+    ├── Project Structure           ✅
+    ├── FastAPI Application Entry   ✅
+    ├── PostgreSQL Connection       ✅
+    ├── SQLAlchemy Models           ✅
+    ├── Model Registry              ✅
+    ├── Tests Structure             ✅
+    ├── Basic Connection Tests      ✅
+    └── Git Version Control         ✅
 
 ↓
 
 Phase 2：Database Layer
-    ├── SQLAlchemy Metadata    ✅
-    ├── Database Layer Refactor✅
-    │   └── .env / 環境變數     
+    ├── SQLAlchemy Metadata         ✅
+    ├── Database Layer Refactor     ✅
+    │   ├── .env / 環境變數       ✅
+    │   ├── DATABASE_URL         ✅
+    │   ├── Engine               ✅
+    │   ├── SessionLocal         ✅
+    │   └── get_db()             ✅  ← 新增
+    │
+    │
+    ├── Session 測試             ✅  ← 新增
+    │
+    ├── FastAPI Dependency          ✅
+    │   └── Depends(get_db)      ✅
     ├── Alembic
     └── Migration
 
