@@ -1,3 +1,5 @@
+# 確認 engine 能不能真的連到 PostgreSQL。
+
 from app.database import engine
 
 
