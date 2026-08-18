@@ -38,6 +38,7 @@ load_dotenv()
 # 按照大型／正式專案的做法，我們不應該把密碼直接寫在 Python 程式碼裡。
 # DATABASE_URL = "postgresql://postgres:konts12345@localhost:5432/etf_database"
 
+## 從環境變數取得 Database URL
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 # 如果我沒有找到 DATABASE_URL ; 不要繼續跑，直接報錯告訴開發者
@@ -47,14 +48,38 @@ if DATABASE_URL is None:
 # 把「DATABASE_URL 有沒有成功載入」這件事情印出來到終端機顯示。
 # print("DATABASE_URL loaded:", DATABASE_URL is not None)
 
+
+# 負責管理與 PostgreSQL 的連線
 engine = create_engine(DATABASE_URL)
 
-
+# 負責建立每一次 Database 操作所需要的 Session
 SessionLocal = sessionmaker(
+    #建立出來的 Session，要使用這個 Engine 去連資料庫
+    bind=engine,
+    #不要讓 SQLAlchemy 自動幫我們 flush
     autoflush=False,
-    bind=engine
+    #不要自動幫我 Commit。
+    autocommit=False,
 )
 
-
+#  所有 ORM Model 都應該繼承這個 Base
 class Base(DeclarativeBase):
     pass
+
+
+# def 是 Python 用來**定義函式（function）**的關鍵字。
+# 建立一個叫做 get_db 的函式。
+# 冒號代表： 接下來縮排的內容，就是這個函式要執行的程式。
+def get_db():
+    # 呼叫 SessionLocal，建立一個 Database Session，並把這個 Session 指派給變數 db
+    db = SessionLocal()
+
+    # 嘗試執行
+    try:
+        # yield 是 Python 關鍵字: 用來建立/控制 Generator（生成器），遇到 yield 時先把這個值交出去，之後可以從這裡繼續。
+        yield db
+        
+    # 不管怎樣都執行
+    finally:
+        # 使用完關閉 Session
+        db.close()
