@@ -9,7 +9,7 @@ from logging.config import fileConfig
 from alembic import context
 
 # 導入 app.database 拿到 SQLAlchemy 已建立的 Base.metadata 以及 DB connection
-from app.database import Base, engine
+from app.database import Base, engine, DATABASE_URL
 # 導入 app.models 確保你的 models/__init__.py 內 5 個 Model 被載入、註冊進 Base.metadata; 然後：Base.metadata 才會有初始的 5 張 Table
 import app.models
 
@@ -51,7 +51,11 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    # 目前 database.py 已經有 Database URL 來源 ; 所以 Alembic 不需要自己再讀一次
+    # url = config.get_main_option("sqlalchemy.url")
+
+    # 直接透過 from app.database import Base, engine, DATABASE_URL 來導入讀取
+    url = DATABASE_URL
     context.configure(
         url=url,
         target_metadata=target_metadata,
