@@ -1,9 +1,17 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+# 讓 Alembic 直接使用 database.py 已經建立好的 engine，這以下兩個就不需要了。
+# from sqlalchemy import engine_from_config
+# from sqlalchemy import pool
+
+
 
 from alembic import context
+
+# 導入 app.database 拿到 SQLAlchemy 已建立的 Base.metadata 以及 DB connection
+from app.database import Base, engine
+# 導入 app.models 確保你的 models/__init__.py 內 5 個 Model 被載入、註冊進 Base.metadata; 然後：Base.metadata 才會有初始的 5 張 Table
+import app.models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -18,7 +26,12 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+
+#這裡不能維持 None，要讓 Alembic 知道你的 SQLAlchemy Metadata。
+# target_metadata = None
+
+# 目前 Base.metadata 應該有 初始的 5 張 Table Model; 並告訴 Alembic：「我要拿這份 Metadata 跟 PostgreSQL Schema 比對」
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -57,15 +70,21 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
 
-    with connectable.connect() as connection:
+    # 以下那一段是告訴 Alembic：「你自己去 alembic.ini 找資料庫設定，然後自己建立 Engine。」
+    # connectable = engine_from_config(
+    #     config.get_section(config.config_ini_section, {}),
+    #     prefix="sqlalchemy.",
+    #     poolclass= pool.NullPool,
+    # )
+
+    # 但你的專案已經有：database.py 檔案內的 engine ; 所以這裡沒必要再建立第二個 Engine。
+    # with connectable.connect() as connection:
+
+    with engine.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata
+            connection=connection, 
+            target_metadata=target_metadata
         )
 
         with context.begin_transaction():
