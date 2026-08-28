@@ -104,6 +104,7 @@ ETF_project/
 │   │
 │   ├── alembic/               ← Alembic migration
 │   │   ├── versions/
+│   │   │   └── ced6121355c1_建立初始_schema_baseline.py
 │   │   └── env.py
 │   ├── app/
 │   │   ├── __init__.py
@@ -186,16 +187,30 @@ env.py 連接 Base.metadata ✅
 1. Alembic 可以正常連到 PostgreSQL ✅
 2. env.py 可以正常執行 ✅
 3. Base.metadata 可以被 Alembic 讀到 ✅
-4. 你的 Model 已經成功載入 ✅
-5. Alembic 比對目前 PostgreSQL Schema 後，沒有發現新的 Schema 變更 ✅
+4. Model 已經成功載入並註冊到 Base.metadata ✅
+5. Alembic 比對目前 PostgreSQL Schema 後，
+   沒有發現新的 Schema 變更 ✅
         ↓
-建立第一個 Migration
+6. 既有 PostgreSQL Schema
+   建立 Alembic Baseline ✅
         ↓
-檢查 Migration 內容
+   建立初始 Migration Revision
+   ced6121355c1 ✅
         ↓
-套用 Migration 到 PostgreSQL
+   stamp
+   將目前既有的 PostgreSQL Schema
+   標記為 Alembic 的第一個版本 ✅
         ↓
-確認 SQLAlchemy Model 與 PostgreSQL Schema 同步
+   alembic current
+   確認目前版本為 ced6121355c1 (head) ✅
+        ↓
+7. 未來 Schema 修改
+        ↓
+   revision --autogenerate
+        ↓
+   檢查 Migration 內容
+        ↓
+   upgrade head
 
 開始。
 
@@ -355,10 +370,13 @@ Phase 2：Database Layer
 ├── Alembic                     ← 現在 2026/08/25
 │   ├── 已完成：
 │   │   │
-│   │   ├── 安裝 Alembic
+│   │   ├── 安裝 Alembic ✅
 │   │   │
-│   │   ├── 確認 Alembic 可正常執行
-│   │   │   └── alembic --version
+│   │   ├── 確認 Alembic 可正常執行 ✅
+│   │   │   ├── 透過 alembic --version 建立初始 Schema Baseline 版本
+│   │   │   ├── 確認 Baseline Migration 檔案(Get-Content alembic/versions/ced6121355c1...)
+│   │   │   ├── 執行 alembic stamp (把目前 PostgreSQL 已經存在的 5 張 Table 的 Schema 狀態，登記成 Alembic 的第一個版本 ced6121355c1。)
+│   │   │   └── 執行 alembic current (確認目前這個 PostgreSQL Database 的 Alembic 認為自己在哪個版本。)
 │   │   │
 │   │   └── 初始化 Alembic Migration 架構
 │   │       └── alembic init alembic
