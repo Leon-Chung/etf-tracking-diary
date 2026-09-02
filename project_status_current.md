@@ -204,13 +204,19 @@ env.py 連接 Base.metadata ✅
    alembic current
    確認目前版本為 ced6121355c1 (head) ✅
         ↓
-7. 未來 Schema 修改
+7. 建立第一次未來 Schema 修改/測試 (修改 app/Models/其中一個檔案)✅
         ↓
    revision --autogenerate
+   (ex. alembic revision --autogenerate -m "add description to etf info")✅
         ↓
-   檢查 Migration 內容
+   檢查 Migration 內容 
+   (至 alembic/versions/跳出新建立 Schema 修改/測試 檔案內容比對新增項目是否一致)✅
         ↓
-   upgrade head
+   upgrade head (ex. alembic upgrade head)✅
+   (看到終端機這一行 Running upgrade ced6121355c1 -> 74d33540b2a9)
+   代表 Alembic 已經真的把這次 Migration 套用到 PostgreSQL。
+        ↓
+    
 
 開始。
 
@@ -300,7 +306,7 @@ Phase 1：Backend Foundation
 
 Phase 2：Database Layer
 │
-├── SQLAlchemy Metadata                    ✅
+├── SQLAlchemy Metadata ✅
 │   ├── 負責什麼：
 │   │   └── 描述 Python ORM Model 所代表的 Database Schema
 │   │       例如：Table、Column、Primary Key、Foreign Key
@@ -308,49 +314,49 @@ Phase 2：Database Layer
 │   └── 窗口：
 │       └── app/models/*.py
 │
-├── Database Layer Refactor                ✅
+├── Database Layer Refactor ✅
 │   │
-│   ├── .env / 環境變數                    ✅
+│   ├── .env / 環境變數 ✅
 │   │   ├── 負責什麼：
 │   │   │   └── 保存 Database 連線資訊
 │   │   └── 窗口：
 │   │       └── backend/.env
 │   │
-│   ├── DATABASE_URL                       ✅
+│   ├── DATABASE_URL ✅
 │   │   ├── 負責什麼：
 │   │   │   └── 告訴 SQLAlchemy「要連哪一個 Database」
 │   │   └── 窗口：
 │   │       └── app/database.py
 │   │
-│   ├── Engine                             ✅
+│   ├── Engine ✅
 │   │   ├── 負責什麼：
 │   │   │   └── 管理 Python 與 PostgreSQL 之間的 Database 連線
 │   │   └── 窗口：
 │   │       └── app/database.py
 │   │
-│   ├── SessionLocal                       ✅
+│   ├── SessionLocal ✅
 │   │   ├── 負責什麼：
 │   │   │   └── 建立 Database Session，
 │   │   │       讓程式可以執行 Database 操作
 │   │   └── 窗口：
 │   │       └── app/database.py
 │   │
-│   └── get_db()                           ✅
+│   └── get_db() ✅
 │       ├── 負責什麼：
 │       │   └── 每一次 Request 建立 Session，
 │       │       使用完後關閉 Session
 │       └── 窗口：
 │           └── app/database.py
 │
-├── Session 測試                         ✅
+├── Session 測試 ✅
 │   ├── 負責什麼：
 │   │   └── 確認 Session 是否能正常建立、
 │   │       使用，以及正確關閉
 │   └── 窗口：
 │       └── tests/database/test_session.py
 │
-├── FastAPI Dependency                   ✅
-│   ├── Depends(get_db)                  ✅
+├── FastAPI Dependency ✅
+│   ├── Depends(get_db) ✅
 │   ├── 負責什麼：
 │   │   └── Request 進入 API 時，
 │   │       由 FastAPI 自動取得 Database Session，
@@ -358,7 +364,7 @@ Phase 2：Database Layer
 │   └── 窗口：
 │       └── app/main.py
 │
-├── pyproject.toml                       ✅
+├── pyproject.toml ✅
 │   ├── 負責什麼：
 │   │   ├── 定義 Python 專案資訊
 │   │   ├── 定義 Python 版本需求
@@ -367,36 +373,84 @@ Phase 2：Database Layer
 │   └── 窗口：
 │       └── backend/pyproject.toml
 │
-├── Alembic                     ← 現在 2026/08/25
+├── Alembic ✅
 │   ├── 已完成：
-│   │   │
-│   │   ├── 安裝 Alembic ✅
-│   │   │
-│   │   ├── 確認 Alembic 可正常執行 ✅
-│   │   │   ├── 透過 alembic --version 建立初始 Schema Baseline 版本
-│   │   │   ├── 確認 Baseline Migration 檔案(Get-Content alembic/versions/ced6121355c1...)
-│   │   │   ├── 執行 alembic stamp (把目前 PostgreSQL 已經存在的 5 張 Table 的 Schema 狀態，登記成 Alembic 的第一個版本 ced6121355c1。)
-│   │   │   └── 執行 alembic current (確認目前這個 PostgreSQL Database 的 Alembic 認為自己在哪個版本。)
-│   │   │
-│   │   └── 初始化 Alembic Migration 架構
-│   │       └── alembic init alembic
-│   │                           
+│   │ │
+│   │ ├── 安裝 Alembic ✅
+│   │ │
+│   │ ├── 初始化 Alembic Migration 架構 ✅
+│   │ │   └── alembic init alembic
+│   │ │
+│   │ ├── Alembic 可以正常連線 PostgreSQL ✅
+│   │ │
+│   │ ├── env.py 可以正常執行 ✅
+│   │ │
+│   │ ├── Base.metadata 可以被 Alembic 讀取 ✅
+│   │ │
+│   │ ├── Model 已成功載入並註冊到 ✅
+│   │ │ Base.metadata
+│   │ │
+│   │ ├── Autogenerate 可以正確比對 Schema ✅
+│   │ │
+│   │ ├── 建立既有 PostgreSQL Schema Baseline ✅
+│   │ │
+│   │ ├── 建立 Baseline Migration ✅
+│   │ │   └── ced6121355c1
+│   │ │
+│   │ ├── Stamp 既有 PostgreSQL Schema ✅
+│   │ │   └── 將目前既有 Schema 標記為
+│   │ │       Alembic 的第一個版本
+│   │ │
+│   │ ├── alembic current ✅
+│   │ │   └── 確認目前版本為
+│   │ │     ced6121355c1 (head)
+│   │ │
+│   │ └── Future Schema Change ✅
+│   │ │   ├── 修改 SQLAlchemy Model
+│   │ │   └── ETFInfo 新增 description
+│   │ │
+│   │ ├── revision --autogenerate ✅
+│   │ │   └── Alembic 偵測到：
+│   │ │       etf_info.description
+│   │ │
+│   │ ├── 建立 Migration ✅
+│   │ │   └── 74d33540b2a9
+│   │ │
+│   │ ├── 檢查 Migration 內容 ✅
+│   │ │
+│   │ ├── upgrade head ✅
+│   │ │   └── 將 description 套用到 PostgreSQL
+│   │ │         
+│   │ │
+│   │ └── alembic current ✅
+│   │     └── 74d33540b2a9 (head)
+│   │
 │   ├── 負責什麼：
 │   │   ├── 管理 Database Schema 的版本
-│   │   ├── 根據 SQLAlchemy Model 的變更 -> 產生 Migration
+│   │   ├── 比對 SQLAlchemy Model 與目前 Database Schema
+│   │   ├── 根據 Schema 變更產生 Migration
 │   │   └── 將 Migration 套用到 PostgreSQL
 │   │
 │   └── 窗口：
 │       └── backend/alembic/
 │
-└── Migration
-    ├── 負責什麼：
-    │   ├── 記錄「Database 做了什麼結構變更」
-    │   ├── 記錄變更的先後順序
-    │   └── 讓不同環境可以依序套用相同的 Database 變更
-    │
-    └── 窗口：
-        └── backend/alembic/versions/
+├── Migration ✅
+│   ├── 負責什麼：
+│   │   ├── 記錄「Database 做了什麼結構變更」
+│   │   ├── 記錄變更的先後順序
+│   │   ├── 定義 upgrade / downgrade
+│   │   └── 讓不同環境可以依序套用相同的
+│   │   Database Schema 變更
+│   │
+│   └── 窗口：
+│       └── backend/alembic/versions/
+│       │
+│       ├── ced6121355c1_...py
+│       │   └── Baseline
+│       │
+│       └── 74d33540b2a9_...py               ← 目前進度：2026/09/02
+│           └── 新增 etf_info.description
+
 ↓
 
 Phase 3：Repository Layer
