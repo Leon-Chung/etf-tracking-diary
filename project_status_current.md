@@ -109,16 +109,23 @@ ETF_project/
 │   ├── app/
 │   │   ├── __init__.py
 │   │   ├── main.py            ← FastAPI入口
-│   │   ├── database.py        ← PostgreSQL連線 
+│   │   ├── database.py        ← PostgreSQL連線 (Engine / Session / get_db)
 │   │   │
-│   │   └── models/            ← SQLAlchemy ORM Model( Python 對資料庫的「模型描述」)   
-│   │       ├── __init__.py       ← SQLAlchemy Model 統一出口 (集中匯入以下檔案以方便其他模組引用)  
-│   │       ├── etf_info.py           ← 已完成(匯出到__init__.py內)
-│   │       ├── etf_snapshot.py       ← 已完成(匯出到__init__.py內)  
-│   │       ├── etf_holdings.py       ← 已完成(匯出到__init__.py內)  
-│   │       ├── etf_dividend.py       ← 已完成(匯出到__init__.py內)  
-│   │       └── etf_price_history.py  ← 已完成(匯出到__init__.py內)  
-│   │
+│   │   ├── models/            ← SQLAlchemy ORM Model ( Python 對資料庫的「模型描述」/ Model / Schema 定義)   
+│   │   │    ├── __init__.py       ← SQLAlchemy Model 統一出口 (集中匯入以下檔案以方便其他模組引用)  
+│   │   │    ├── etf_info.py           ← 已完成(匯出到__init__.py內)
+│   │   │    ├── etf_snapshot.py       ← 已完成(匯出到__init__.py內)  
+│   │   │    ├── etf_holdings.py       ← 已完成(匯出到__init__.py內)  
+│   │   │    ├── etf_dividend.py       ← 已完成(匯出到__init__.py內)  
+│   │   │    └── etf_price_history.py  ← 已完成(匯出到__init__.py內)  
+│   │   │
+│   │   │ 
+│   │   ├── repositories/       ← 怎麼對 etf_info 做資料庫操作 (Repository / Database 操作)
+│   │        ├── __init__.py       ← 告訴 Python：repositories/ 是一個可以被當成 Package 使用的模組目錄    
+│   │        ├── etf_info.py       
+│   │    
+│   │    
+│   │    
 │   ├── tests/
 │   │   ├── __init__.py
 │   │   │
@@ -168,7 +175,7 @@ ETF_project/
 
 下一步請從：
 
-SQLAlchemy Metadata 驗證✅
+<!-- SQLAlchemy Metadata 驗證✅
         ↓
 database layer 整理／確認✅
         ↓
@@ -181,10 +188,16 @@ env.py 連接 Base.metadata ✅
 讓 Alembic 使用既有 DATABASE_URL✅
         ↓
 進入 Alembic check 實際驗證的階段✅
-(成功: No new upgrade operations detected.)
+(成功: No new upgrade operations detected.) -->
+
+2026/09/03
+
+已經建立好的 app/repositories/etf_info.py
+        ↓
+
 
 代表目前：
-1. Alembic 可以正常連到 PostgreSQL ✅
+<!-- 1. Alembic 可以正常連到 PostgreSQL ✅
 2. env.py 可以正常執行 ✅
 3. Base.metadata 可以被 Alembic 讀到 ✅
 4. Model 已經成功載入並註冊到 Base.metadata ✅
@@ -226,8 +239,10 @@ env.py 連接 Base.metadata ✅
         ↓
    upgrade head (ex. alembic upgrade head)✅
    (看到終端機這一行 Running upgrade 74d33540b2a9 -> d11ef0512479, remove description from etf info)
-   代表 Alembic 已經真的把這次 Migration 套用到 PostgreSQL。
-
+   代表 Alembic 已經真的把這次 Migration 套用到 PostgreSQL。 -->
+2026/09/03
+app/repositories/etf_info.py 寫入第一行 import
+        ↓
 
 開始。
 
@@ -455,21 +470,55 @@ Phase 2：Database Layer
 │   │
 │   └── 窗口：
 │       └── backend/alembic/versions/
-│       │
-│       ├── ced6121355c1_...py
-│       │   └── Baseline
-│       │
-│       ├── 74d33540b2a9_...py               ← 目前進度：2026/09/02
-│       │   └── 新增 etf_info.description (測試)
-│       │
-│       └── d11ef0512479_...py
-│           └── 刪除 etf_info.description (測試)
+│           │
+│           ├── ced6121355c1_...py
+│           │   └── Baseline
+│           │
+│           ├── 74d33540b2a9_...py               
+│           │   └── 新增 etf_info.description (測試)
+│           │
+│           └── d11ef0512479_...py
+│               └── 刪除 etf_info.description (測試)
+
+
 ↓
 
-Phase 3：Repository Layer
-    ├── CRUD
-    ├── Query
-    └── Transaction
+Phase 3：Repository Layer    ← 目前進度：2026/09/03
+│
+├── Repository 基本概念
+│   ├── 負責什麼： 集中管理 Database 資料存取操作。
+│   │    ├── 拿資料
+│   │    ├── 存資料
+│   │    ├── 修改資料
+│   │    └── 刪除資料
+│   │    
+│   └── 窗口：
+│       └── backend/app/repositories/
+│           │
+│           ├── __init__.py   
+│           ├── etf_info.py    
+│    
+├── CRUD
+│   ├── Create
+│   ├── Read
+│   ├── Update
+│   └── Delete    
+│
+│
+│
+│
+│
+│
+│
+│
+│
+│
+│
+├── Query
+│
+│
+├── Transaction
+│    
 
 ↓
 
