@@ -216,7 +216,18 @@ env.py 連接 Base.metadata ✅
    (看到終端機這一行 Running upgrade ced6121355c1 -> 74d33540b2a9)
    代表 Alembic 已經真的把這次 Migration 套用到 PostgreSQL。
         ↓
-    
+8. 移除第一次測試的 Schema (刪除第一次 app/Models/其中一個檔案) ✅    
+        ↓
+   revision --autogenerate
+   (ex. alembic revision --autogenerate -m "remove description from etf info")✅
+        ↓
+   檢查 Migration 內容 
+   (至 alembic/versions/跳出新建立 Schema 修改/測試 檔案內容比對刪除項目是否一致)✅
+        ↓
+   upgrade head (ex. alembic upgrade head)✅
+   (看到終端機這一行 Running upgrade 74d33540b2a9 -> d11ef0512479, remove description from etf info)
+   代表 Alembic 已經真的把這次 Migration 套用到 PostgreSQL。
+
 
 開始。
 
@@ -448,9 +459,11 @@ Phase 2：Database Layer
 │       ├── ced6121355c1_...py
 │       │   └── Baseline
 │       │
-│       └── 74d33540b2a9_...py               ← 目前進度：2026/09/02
-│           └── 新增 etf_info.description
-
+│       ├── 74d33540b2a9_...py               ← 目前進度：2026/09/02
+│       │   └── 新增 etf_info.description (測試)
+│       │
+│       └── d11ef0512479_...py
+│           └── 刪除 etf_info.description (測試)
 ↓
 
 Phase 3：Repository Layer
