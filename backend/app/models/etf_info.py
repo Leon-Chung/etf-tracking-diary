@@ -55,11 +55,6 @@ class ETFInfo(Base): # 每一張資料表，都會建立一個 Python Class，�
         nullable=False
     )
 
-    # 新增 建立第一次 未來 Schema 修改 測試
-    description: Mapped[str | None] = mapped_column(
-    String(255)
-    )
-
     issuer: Mapped[str] = mapped_column(
         String(100),
         nullable=False
