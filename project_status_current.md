@@ -190,12 +190,16 @@ env.py 連接 Base.metadata ✅
 進入 Alembic check 實際驗證的階段✅
 (成功: No new upgrade operations detected.) -->
 
-2026/09/03
+2026/09/10
 
-已經建立好的 app/repositories/etf_info.py
+已經建立好的 app/repositories/etf_info.py(存資料庫)
         ↓
-
-
+已經建立好的 app/crawlers/etf_info_yuanta.py(元大撈資料)
+        ↓
+已經建立好的 app/crawlers/etf_holdings.py(測試元大撈出的資料能否讀出/✅)
+        ↓
+已經建立好的 app/crawlers/etf_info.py(各卷商統一入口)
+        ↓
 代表目前：
 <!-- 1. Alembic 可以正常連到 PostgreSQL ✅
 2. env.py 可以正常執行 ✅
@@ -240,8 +244,8 @@ env.py 連接 Base.metadata ✅
    upgrade head (ex. alembic upgrade head)✅
    (看到終端機這一行 Running upgrade 74d33540b2a9 -> d11ef0512479, remove description from etf info)
    代表 Alembic 已經真的把這次 Migration 套用到 PostgreSQL。 -->
-2026/09/03
-app/repositories/etf_info.py 寫入第一行 import
+2026/09/10
+準備建立其他 app/crawlers/etf_info_XXXX.py(撈某卷商)卷商資料
         ↓
 
 開始。
@@ -483,7 +487,21 @@ Phase 2：Database Layer
 
 ↓
 
-Phase 3：Repository Layer    ← 目前進度：2026/09/03
+Phase 3：Repository Layer    ← 目前進度：2026/09/15
+│
+│
+│
+├── Data Collection / Crawlers ✅
+│   ├── 負責什麼：撈取外部網站資料
+│   │     
+│   │    
+│   └── 窗口：    
+│       └── backend/app/Crawlers/
+│           │    
+│           ├── __init__.py
+│           ├── etf_info.py 
+│           ├── etf_info_yuanfrom.py 
+│           ├── etf_holdings.py     
 │
 ├── Repository 基本概念
 │   ├── 負責什麼： 集中管理 Database 資料存取操作。
