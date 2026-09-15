@@ -93,7 +93,7 @@ ETF 配息紀錄
 ETF_project/
 │
 │
-├── .venv/ ← 舊的虛擬環境(應該要安裝在有 python 的資料環境內)
+├── .venv/ ← 舊的虛擬環境(應該要安裝在有 python 的資料環境內-2026/09/15 已刪除)
 │
 │
 ├── backend/
@@ -110,6 +110,31 @@ ETF_project/
 │   │   ├── __init__.py
 │   │   ├── main.py            ← FastAPI入口
 │   │   ├── database.py        ← PostgreSQL連線 (Engine / Session / get_db)
+│   │   │
+│   │   │
+│   │   │
+│   │   ├── crawlers/            ← 撈取外部網站資料
+│   │   │    ├── yuanta/         ← 元大       
+│   │   │    │   ├── etf_info_yuanta.py    
+│   │   │    │   ├── etf_holdings_yuanta.py       
+│   │   │    │   ├──
+│   │   │    │   ├──
+│   │   │    │   └──
+│   │   │    ├── fubon/         ← 富邦       
+│   │   │    │   ├── etf_info_fubon.py    
+│   │   │    │   ├── etf_holdings_fubon.py       
+│   │   │    │   ├──
+│   │   │    │   ├──
+│   │   │    │   └──
+│   │   │    │ 
+│   │   │    │ 
+│   │   │    ├── __init__.py       ← 統一出口
+│   │   │    ├── etf_info.py           ← 撈取資料後的統一出口
+│   │   │    ├── etf_snapshot.py       ←  
+│   │   │    ├── etf_holdings.py       ←   
+│   │   │    ├── etf_dividend.py       ←  
+│   │   │    └── etf_price_history.py  ←  
+│   │   │
 │   │   │
 │   │   ├── models/            ← SQLAlchemy ORM Model ( Python 對資料庫的「模型描述」/ Model / Schema 定義)   
 │   │   │    ├── __init__.py       ← SQLAlchemy Model 統一出口 (集中匯入以下檔案以方便其他模組引用)  
@@ -190,13 +215,17 @@ env.py 連接 Base.metadata ✅
 進入 Alembic check 實際驗證的階段✅
 (成功: No new upgrade operations detected.) -->
 
-2026/09/10
+2026/09/15
 
 已經建立好的 app/repositories/etf_info.py(存資料庫)
         ↓
-已經建立好的 app/crawlers/etf_info_yuanta.py(元大撈資料)
+已經建立好的 app/crawlers/yuanta/etf_info_yuanta.py(元大撈資料)
         ↓
-已經建立好的 app/crawlers/etf_holdings.py(測試元大撈出的資料能否讀出/✅)
+已經建立好的 app/crawlers/yuanta/etf_holdings_yuanta.py(測試元大撈出的資料能否讀出/✅)
+        ↓
+已經建立好的 app/crawlers/fubon/etf_info_fubon.py(測試富邦撈出的資料能否讀出/✅)
+        ↓
+已經建立好的 app/crawlers/fubon/etf_holdings_fubon.py(富邦元大撈出的資料能否讀出/✅)
         ↓
 已經建立好的 app/crawlers/etf_info.py(各卷商統一入口)
         ↓
@@ -245,7 +274,7 @@ env.py 連接 Base.metadata ✅
    (看到終端機這一行 Running upgrade 74d33540b2a9 -> d11ef0512479, remove description from etf info)
    代表 Alembic 已經真的把這次 Migration 套用到 PostgreSQL。 -->
 2026/09/10
-準備建立其他 app/crawlers/etf_info_XXXX.py(撈某卷商)卷商資料
+準備建立其他 app/crawlers/XXX(某卷商)/etf_info_XXXX.py(撈某卷商)卷商資料
         ↓
 
 開始。
