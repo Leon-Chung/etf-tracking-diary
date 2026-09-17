@@ -112,6 +112,12 @@ ETF_project/
 │   │   ├── database.py        ← PostgreSQL連線 (Engine / Session / get_db)
 │   │   │
 │   │   │
+│   │   ├── api/
+│   │   │    ├── V1/
+│   │   │         ├── etf_api_v1.py ← 使用者的收發請求並呼叫 etf_service_search.py 來執行調度
+│   │   │
+│   │   │
+│   │   │
 │   │   │
 │   │   ├── crawlers/            ← 撈取外部網站資料
 │   │   │    ├── yuanta/         ← 元大       
@@ -129,6 +135,7 @@ ETF_project/
 │   │   │    │ 
 │   │   │    │ 
 │   │   │    ├── __init__.py       ← 統一出口
+│   │   │    ├── etf_base.py           ← 讓 etf_service_search.py 可以透過 etf_base.py 統一呼叫大家(各卷商的 etf_info_XXX.py)搜尋資料
 │   │   │    ├── etf_info.py           ← 撈取資料後的統一出口
 │   │   │    ├── etf_snapshot.py       ←  
 │   │   │    ├── etf_holdings.py       ←   
@@ -146,11 +153,31 @@ ETF_project/
 │   │   │
 │   │   │ 
 │   │   ├── repositories/       ← 怎麼對 etf_info 做資料庫操作 (Repository / Database 操作)
-│   │        ├── __init__.py       ← 告訴 Python：repositories/ 是一個可以被當成 Package 使用的模組目錄    
-│   │        ├── etf_info.py       
-│   │    
-│   │    
-│   │    
+│   │   │     ├── __init__.py       ← 告訴 Python：repositories/ 是一個可以被當成 Package 使用的模組目錄    
+│   │   │     ├── etf_info.py       
+│   │   │ 
+│   │   │
+│   │   │
+│   │   │
+│   │   ├── schemas/ 
+│   │   │     ├── etf_schemas.py        ← 各卷商的 etf_info_XXX.py 搜尋出符合的資料;透過 etf_schemas.py 將其統一格式標準物件回傳給使用者
+│   │   │ 
+│   │   │
+│   │   │
+│   │   │
+│   │   │
+│   │   │
+│   │   ├── services/
+│   │   │     ├── etf_service_search.py ← 統一出入口（負責發號施令給 etf_base.py || 收集 etf_schemas.py 回傳結果）
+│   │   │
+│   │   │
+│   │   │
+│   │   │
+│   │   │
+│   │   │
+│   │   │
+│   │   │  
+│   │   │ 
 │   ├── tests/
 │   │   ├── __init__.py
 │   │   │
